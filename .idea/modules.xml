@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.sucursal.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.sucursal.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sucursal.main.iml" filepath="$PROJECT_DIR$/.idea/modules/sucursal.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/sucursalOficial.iml" filepath="$PROJECT_DIR$/.idea/sucursalOficial.iml" />
+    </modules>
+  </component>
+</project>
