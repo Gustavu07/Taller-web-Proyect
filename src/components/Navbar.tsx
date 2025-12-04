@@ -3,8 +3,8 @@ import { LogOut, User, MessageSquare, Package, Building2, ChevronDown, Users, Cl
 import { useAuth } from '../contexts/AuthContext';
 
 type NavbarProps = {
-  currentView: 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory';
-  onNavigate: (view: 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory') => void;
+  currentView: 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory' | 'admin-lotes';
+  onNavigate: (view: 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory'| 'admin-lotes') => void;
 };
 
 export default function Navbar({ currentView, onNavigate }: NavbarProps) {
@@ -168,7 +168,6 @@ export default function Navbar({ currentView, onNavigate }: NavbarProps) {
             </div>
           </div>
 
-          {/* Derecha */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
               <div className="flex items-center gap-2 text-sm text-gray-700">

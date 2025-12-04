@@ -5,9 +5,10 @@ import Landing from './pages/Landing';
 import ChatBot from './components/ChatBot';
 import AdminBranches from './pages/AdminBranches';
 import AdminPersonal from './pages/AdminPersonal';
-import AdminInventory from './pages/AdminInventory';
+//import AdminInventory from './pages/AdminInventory';
 import AdminHorarios from './pages/AdminHorarios';
 import AdminAsignacionCorporativas from './pages/AdminAsignacionCorporativas';
+import AdminInventarios from './pages/AdminInventarios';
 
 type View = 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory';
 
@@ -29,7 +30,7 @@ function App() {
       case 'admin-asignaciones':
         return <AdminAsignacionCorporativas />;
       case 'admin-inventory':
-        return <AdminInventory />;
+        return <AdminInventarios />;
       default:
         return <Landing />;
     }
