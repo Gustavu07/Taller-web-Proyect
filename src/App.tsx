@@ -1,0 +1,48 @@
+import { useState } from 'react';
+import { AuthProvider } from './contexts/AuthContext';
+import Navbar from './components/Navbar';
+import Landing from './pages/Landing';
+import ChatBot from './components/ChatBot';
+import AdminBranches from './pages/AdminBranches';
+import AdminPersonal from './pages/AdminPersonal';
+import AdminInventory from './pages/AdminInventory';
+import AdminHorarios from './pages/AdminHorarios';
+import AdminAsignacionCorporativas from './pages/AdminAsignacionCorporativas';
+
+type View = 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory';
+
+function App() {
+  const [currentView, setCurrentView] = useState<View>('landing');
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'landing':
+        return <Landing />;
+      case 'chat':
+        return <ChatBot />;
+      case 'admin-branches':
+        return <AdminBranches />;
+      case 'admin-personal':
+        return <AdminPersonal />;
+      case 'admin-horarios':
+        return <AdminHorarios />;
+      case 'admin-asignaciones':
+        return <AdminAsignacionCorporativas />;
+      case 'admin-inventory':
+        return <AdminInventory />;
+      default:
+        return <Landing />;
+    }
+  };
+
+  return (
+    <AuthProvider>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar currentView={currentView} onNavigate={setCurrentView} />
+        {renderView()}
+      </div>
+    </AuthProvider>
+  );
+}
+
+export default App;
