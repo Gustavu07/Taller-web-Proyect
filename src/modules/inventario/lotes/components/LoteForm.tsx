@@ -1,4 +1,3 @@
-// src/modules/inventario/lotes/components/LoteForm.tsx
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useLoteMutations } from '../hooks/useLote';
@@ -11,7 +10,7 @@ interface LoteFormProps {
 }
 
 export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
-  const { create, update, isPending } = useLoteMutations();
+  const { create,  isPending } = useLoteMutations();
 
   const [formData, setFormData] = useState<LoteCreateDTO>({
     productoId: productoId,
@@ -21,13 +20,12 @@ export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
     notificacionActiva: true,
   });
 
-  // Cargar datos si es edición
   useEffect(() => {
     if (lote) {
       setFormData({
         productoId: lote.productoId,
         codigoLote: lote.codigoLote,
-        fechaVencimiento: lote.fechaVencimiento,
+        fechaVencimiento: lote.fechaVencimiento.split('T')[0],
         cantidad: lote.cantidad,
         notificacionActiva: lote.notificacionActiva,
       });
@@ -45,7 +43,6 @@ export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
     if (formData.cantidad <= 0) {
       alert('La cantidad debe ser mayor a 0');
       return;
@@ -62,19 +59,7 @@ export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
     }
 
     try {
-      if (lote) {
-        // Actualizar
-        await update({
-          id: lote.id,
-          data: {
-            ...formData,
-            id: lote.id,
-          },
-        });
-      } else {
-        // Crear
-        await create(formData);
-      }
+      await create(formData);
       onClose();
     } catch (error) {
       console.error('Error al guardar lote:', error);
@@ -97,9 +82,7 @@ export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
           </button>
         </div>
 
-        {/* Formulario */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Código de lote */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Código de Lote *
@@ -115,7 +98,6 @@ export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
             />
           </div>
 
-          {/* Cantidad */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Cantidad *
@@ -131,7 +113,6 @@ export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
             />
           </div>
 
-          {/* Fecha de vencimiento */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Fecha de Vencimiento *
@@ -146,7 +127,6 @@ export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
             />
           </div>
 
-          {/* Notificación activa */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -160,14 +140,13 @@ export function LoteForm({ lote, productoId, onClose }: LoteFormProps) {
             </label>
           </div>
 
-          {/* Botones */}
           <div className="flex gap-3 pt-4">
             <button
               type="submit"
               disabled={isPending}
               className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 rounded-md transition-colors"
             >
-              {isPending ? 'Guardando...' : 'Guardar'}
+              {isPending ? 'Guardando...' : lote ? 'Actualizar' : 'Guardar'}
             </button>
             <button
               type="button"

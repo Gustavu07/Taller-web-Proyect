@@ -1,14 +1,9 @@
 import axiosInventario from "../../../../lib/axiosInventario";
-import type { Lote, LoteCreateDTO, LoteUpdateDTO } from "../models/lote";
+import type { Lote, LoteCreateDTO } from "../models/lote";
 
 export const loteService = {
   getAll: async (): Promise<Lote[]> => {
     const response = await axiosInventario.get("/lotes");
-    return response.data;
-  },
-
-  getByProductoId: async (productoId: number): Promise<Lote[]> => {
-    const response = await axiosInventario.get(`/lotes/producto/${productoId}`);
     return response.data;
   },
 
@@ -22,26 +17,17 @@ export const loteService = {
     return response.data;
   },
 
-  update: async (id: number, data: LoteUpdateDTO): Promise<Lote> => {
-    const response = await axiosInventario.put(`/lotes/${id}`, data);
-    return response.data;
-  },
-
-  delete: async (id: number): Promise<void> => {
-    await axiosInventario.delete(`/lotes/${id}`);
-  },
-
-  activarNotificacion: async (id: number): Promise<Lote> => {
+  toggleNotificacion: async (id: number, enabled: boolean): Promise<Lote> => {
     const response = await axiosInventario.patch(
-      `/lotes/${id}/activar-notificacion`
+      `/lotes/${id}/toggle-notificacion`,
+      null,
+      { params: { enabled } }
     );
     return response.data;
   },
 
-  desactivarNotificacion: async (id: number): Promise<Lote> => {
-    const response = await axiosInventario.patch(
-      `/lotes/${id}/desactivar-notificacion`
-    );
+  darDeBaja: async (id: number): Promise<Lote> => {
+    const response = await axiosInventario.post(`/lotes/dar-de-baja/${id}`);
     return response.data;
   },
 };

@@ -1,7 +1,6 @@
-// src/modules/inventario/lotes/components/LoteTable.tsx
 import { useState } from 'react';
 import { Package, Plus, Edit2, Trash2, AlertCircle, Bell, BellOff } from 'lucide-react';
-import { useLotesByProducto, useLoteMutations } from '../hooks/useLote';
+import {  useLoteMutations, useLotes } from '../hooks/useLote';
 import { LoteForm } from './LoteForm';
 import { estaVencido, estaProximoAVencer } from '../models/lote';
 import type { Lote } from '../models/lote';
@@ -11,11 +10,13 @@ interface LoteTableProps {
 }
 
 export function LoteTable({ productoId }: LoteTableProps) {
-  const { lotes, isLoading } = useLotesByProducto(productoId);
-  const { remove, activar, desactivar } = useLoteMutations();
+  const { lotes, isLoading } = useLotes();
+  const { toggleNotificacion, darDeBaja, isPending } = useLoteMutations();
   
   const [showModal, setShowModal] = useState(false);
   const [editingLote, setEditingLote] = useState<Lote | null>(null);
+
+  const lotesDelProducto = lotes.filter((lote) => lote.productoId === productoId);
 
   const handleEdit = (lote: Lote) => {
     setEditingLote(lote);
@@ -27,17 +28,13 @@ export function LoteTable({ productoId }: LoteTableProps) {
     setShowModal(true);
   };
 
-  const handleDelete = (id: number) => {
-    if (window.confirm('¿Estás seguro de eliminar este lote?')) {
-      remove(id);
-    }
+  const handleToggleNotificacion = (lote: Lote) => {
+    toggleNotificacion({ id: lote.id, enabled: !lote.notificacionActiva });
   };
 
-  const handleToggleNotificacion = (lote: Lote) => {
-    if (lote.notificacionActiva) {
-      desactivar(lote.id);
-    } else {
-      activar(lote.id);
+  const handleDelete = (id: number) => {
+    if (confirm('¿Estás seguro de que deseas eliminar este lote?')) {
+      darDeBaja(id);
     }
   };
 
@@ -76,9 +73,8 @@ export function LoteTable({ productoId }: LoteTableProps) {
     );
   }
 
-  return (
+   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
           <Package className="w-6 h-6 text-blue-600" />
@@ -93,14 +89,12 @@ export function LoteTable({ productoId }: LoteTableProps) {
         </button>
       </div>
 
-      {/* Grid de lotes */}
-      {lotes.length > 0 ? (
+      {lotesDelProducto.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {lotes.map((lote) => {
+          {lotesDelProducto.map((lote) => {
             const estado = getEstadoLote(lote.fechaVencimiento);
             return (
               <div key={lote.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                {/* Header del lote */}
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <h3 className="font-bold text-gray-900">{lote.codigoLote}</h3>
@@ -112,7 +106,6 @@ export function LoteTable({ productoId }: LoteTableProps) {
                   </span>
                 </div>
 
-                {/* Info del lote */}
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Cantidad:</span>
@@ -144,11 +137,11 @@ export function LoteTable({ productoId }: LoteTableProps) {
                   </div>
                 </div>
 
-                {/* Botones de acción */}
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleToggleNotificacion(lote)}
-                    className={`flex-1 flex items-center justify-center gap-1 px-2 py-2 text-sm rounded-md transition-colors ${
+                    disabled={isPending}
+                    className={`flex-1 flex items-center justify-center gap-1 px-2 py-2 text-sm rounded-md transition-colors disabled:opacity-50 ${
                       lote.notificacionActiva
                         ? 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                         : 'bg-green-100 text-green-700 hover:bg-green-200'
@@ -164,7 +157,8 @@ export function LoteTable({ productoId }: LoteTableProps) {
                   
                   <button
                     onClick={() => handleEdit(lote)}
-                    className="px-3 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition-colors"
+                    disabled={isPending}
+                    className="px-3 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md transition-colors disabled:opacity-50"
                     title="Editar"
                   >
                     <Edit2 className="w-4 h-4" />
@@ -172,7 +166,8 @@ export function LoteTable({ productoId }: LoteTableProps) {
                   
                   <button
                     onClick={() => handleDelete(lote.id)}
-                    className="px-3 py-2 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition-colors"
+                    disabled={isPending}
+                    className="px-3 py-2 bg-red-100 text-red-700 hover:bg-red-200 rounded-md transition-colors disabled:opacity-50"
                     title="Eliminar"
                   >
                     <Trash2 className="w-4 h-4" />

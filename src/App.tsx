@@ -10,6 +10,7 @@ import AdminAsignacionCorporativas from './pages/AdminAsignacionCorporativas';
 import AdminInventarios from './pages/AdminInventarios';
 import AdminLotes from './pages/AdminLotes';
 import AdminMarca from './pages/AdminMarca';
+//import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
 type View = 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory' | 'admin-lotes' | 'admin-marcas' | 'admin-productos';
 
