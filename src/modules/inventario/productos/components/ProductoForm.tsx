@@ -10,7 +10,6 @@ interface ProductoFormProps {
 
 export function ProductoForm({ producto, onClose }: ProductoFormProps) {
   const { create, update, isPending } = useProductoMutations();
-
   const [formData, setFormData] = useState<ProductoCreateDTO>({
     nombre: '',
     marcaId: 0,
@@ -19,7 +18,6 @@ export function ProductoForm({ producto, onClose }: ProductoFormProps) {
     foto: null,
   });
 
-  // Cargar datos si es edición
   useEffect(() => {
     if (producto) {
       setFormData({
@@ -52,7 +50,6 @@ export function ProductoForm({ producto, onClose }: ProductoFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
     if (!formData.nombre.trim()) {
       alert('El nombre es requerido');
       return;
@@ -94,7 +91,6 @@ export function ProductoForm({ producto, onClose }: ProductoFormProps) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Nombre */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Nombre del Producto *
@@ -110,7 +106,6 @@ export function ProductoForm({ producto, onClose }: ProductoFormProps) {
             />
           </div>
 
-          {/* Marca ID */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               ID de Marca *
@@ -127,7 +122,6 @@ export function ProductoForm({ producto, onClose }: ProductoFormProps) {
             />
           </div>
 
-          {/* Descripción */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Descripción
@@ -142,7 +136,6 @@ export function ProductoForm({ producto, onClose }: ProductoFormProps) {
             />
           </div>
 
-          {/* URL de Foto */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               URL de Foto
@@ -170,7 +163,6 @@ export function ProductoForm({ producto, onClose }: ProductoFormProps) {
             )}
           </div>
 
-          {/* Checkbox Activo */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -185,7 +177,6 @@ export function ProductoForm({ producto, onClose }: ProductoFormProps) {
             </label>
           </div>
 
-          {/* Botones */}
           <div className="flex gap-3 pt-4">
             <button
               type="submit"

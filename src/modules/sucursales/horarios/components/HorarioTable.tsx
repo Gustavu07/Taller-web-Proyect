@@ -128,7 +128,6 @@ export function HorarioTable({ sucursalId }: HorarioTableProps) {
         </div>
       )}
 
-      {/* Modal de formulario */}
       {showModal && (
         <HorarioForm
           horario={editingHorario}

@@ -1,4 +1,3 @@
-// src/modules/horarios/components/HorarioForm.tsx
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useHorarioMutations } from '../hooks/useHorarios';

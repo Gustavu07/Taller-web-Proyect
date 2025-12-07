@@ -5,12 +5,13 @@ import Landing from './pages/Landing';
 import ChatBot from './components/ChatBot';
 import AdminBranches from './pages/AdminBranches';
 import AdminPersonal from './pages/AdminPersonal';
-//import AdminInventory from './pages/AdminInventory';
 import AdminHorarios from './pages/AdminHorarios';
 import AdminAsignacionCorporativas from './pages/AdminAsignacionCorporativas';
 import AdminInventarios from './pages/AdminInventarios';
+import AdminLotes from './pages/AdminLotes';
+import AdminMarca from './pages/AdminMarca';
 
-type View = 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory';
+type View = 'landing' | 'chat' | 'admin-branches' | 'admin-personal' | 'admin-horarios' | 'admin-asignaciones' | 'admin-inventory' | 'admin-lotes' | 'admin-marcas' | 'admin-productos';
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('landing');
@@ -31,6 +32,10 @@ function App() {
         return <AdminAsignacionCorporativas />;
       case 'admin-inventory':
         return <AdminInventarios />;
+      case 'admin-lotes':
+        return <AdminLotes />;
+      case 'admin-marcas':
+        return <AdminMarca />;
       default:
         return <Landing />;
     }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
 import { useSucursalMutations } from '../hooks/useSucursales';
+import { Modal } from './SucursalModal';
 import type { Sucursal, SucursalCreateDTO, SucursalUpdateDTO } from '../models/Sucursal';
 
 interface SucursalFormProps {
@@ -98,192 +98,183 @@ export function SucursalForm({ sucursal, onClose }: SucursalFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {sucursal ? 'Editar Sucursal' : 'Nueva Sucursal'}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <X className="w-6 h-6" />
-          </button>
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title={sucursal ? 'Editar Sucursal' : 'Nueva Sucursal'}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Dirección *</label>
+          <input
+            type="text"
+            name="direccion"
+            value={formData.direccion}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            required
+          />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono *</label>
+          <input
+            type="tel"
+            name="telefono"
+            value={formData.telefono}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Dirección *
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Latitud *</label>
             <input
-              type="text"
-              name="direccion"
-              value={formData.direccion}
+              type="number"
+              name="latitud"
+              step="0.000001"
+              value={formData.latitud}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
               required
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Teléfono *
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Longitud *</label>
+            <input
+              type="number"
+              name="longitud"
+              step="0.000001"
+              value={formData.longitud}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">URL de imagen</label>
+          <input
+            type="url"
+            name="imagenUrl"
+            value={formData.imagenUrl || ''}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="https://example.com/image.jpg"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Números de Contacto
+          </label>
+          <div className="flex gap-2 mb-2">
             <input
               type="tel"
-              name="telefono"
-              value={formData.telefono}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              required
+              value={contactoInput}
+              onChange={(e) => setContactoInput(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddContacto();
+                }
+              }}
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Agregar número"
             />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Latitud *
-              </label>
-              <input
-                type="number"
-                name="latitud"
-                step="0.000001"
-                value={formData.latitud}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Longitud *
-              </label>
-              <input
-                type="number"
-                name="longitud"
-                step="0.000001"
-                value={formData.longitud}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              URL de imagen
-            </label>
-            <input
-              type="url"
-              name="imagenUrl"
-              value={formData.imagenUrl || ''}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Números de Contacto
-            </label>
-            <div className="flex gap-2 mb-2">
-              <input
-                type="tel"
-                value={contactoInput}
-                onChange={(e) => setContactoInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddContacto())}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="Agregar número"
-              />
-              <button
-                type="button"
-                onClick={handleAddContacto}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              >
-                Agregar
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {formData.numerosContacto?.map((numero, index) => (
-                <span
-                  key={index}
-                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-2"
-                >
-                  {numero}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveContacto(index)}
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Números Corporativos
-            </label>
-            <div className="flex gap-2 mb-2">
-              <input
-                type="tel"
-                value={corporativoInput}
-                onChange={(e) => setCorporativoInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCorporativo())}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="Agregar número corporativo"
-              />
-              <button
-                type="button"
-                onClick={handleAddCorporativo}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-              >
-                Agregar
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {formData.numerosCorporativos?.map((numero, index) => (
-                <span
-                  key={index}
-                  className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm flex items-center gap-2"
-                >
-                  {numero}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveCorporativo(index)}
-                    className="text-green-600 hover:text-green-800"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="flex gap-3 pt-4">
-            <button
-              type="submit"
-              disabled={isPending}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 rounded-md transition-colors"
-            >
-              {isPending ? 'Guardando...' : 'Guardar'}
-            </button>
             <button
               type="button"
-              onClick={onClose}
-              disabled={isPending}
-              className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-800 font-semibold py-2 rounded-md transition-colors"
+              onClick={handleAddContacto}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              Cancelar
+              Agregar
             </button>
           </div>
-        </form>
-      </div>
-    </div>
+          <div className="flex flex-wrap gap-2">
+            {formData.numerosContacto?.map((numero, index) => (
+              <span
+                key={index}
+                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+              >
+                {numero}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveContacto(index)}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Números Corporativos
+          </label>
+          <div className="flex gap-2 mb-2">
+            <input
+              type="tel"
+              value={corporativoInput}
+              onChange={(e) => setCorporativoInput(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddCorporativo();
+                }
+              }}
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Agregar número corporativo"
+            />
+            <button
+              type="button"
+              onClick={handleAddCorporativo}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            >
+              Agregar
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {formData.numerosCorporativos?.map((numero, index) => (
+              <span
+                key={index}
+                className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+              >
+                {numero}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveCorporativo(index)}
+                  className="text-green-600 hover:text-green-800"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex gap-3 pt-4">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 rounded-md transition-colors"
+          >
+            {isPending ? 'Guardando...' : 'Guardar'}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isPending}
+            className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-800 font-semibold py-2 rounded-md transition-colors"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 }
